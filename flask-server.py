@@ -1,9 +1,15 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+import serial
+import json
 
 app = Flask(__name__)
 CORS(app)
 
+ser=serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+ser.flush()
+
+"""
 ventilator = [
     {
         'tidalVolume' : u'500',
@@ -13,6 +19,7 @@ ventilator = [
         'peep' : u'7'
     }
 ]
+"""
 
 @app.route("/")
 def hello():
@@ -22,7 +29,14 @@ def hello():
 
 @app.route("/api/ventilator", methods=['GET'])
 def get_status():
-    return jsonify({'ventilator': ventilator})
+
+    #return jsonify({'ventilator': ventilator})
+    ser.write(b"getStats\n")
+    line = ser.readline().decode('utf-8').rstrip()
+    jsonline = json.loads(line)
+    print(line)
+    print(jsonline)
+    return(jsonline)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80, debug=True)
