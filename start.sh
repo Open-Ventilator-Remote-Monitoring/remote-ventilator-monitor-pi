@@ -1,1 +1,1 @@
-sudo python3 flask-server.py
+sudo gunicorn --bind 0.0.0.0:80 wsgi:app

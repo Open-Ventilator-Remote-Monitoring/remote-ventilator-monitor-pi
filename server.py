@@ -4,6 +4,7 @@ import serial
 import json
 
 app = Flask(__name__)
+app.config.from_pyfile('config.py')
 CORS(app)
 
 ser=serial.Serial('/dev/ttyACM0', 9600, timeout=1)
@@ -39,4 +40,4 @@ def get_status():
     return(jsonline)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=80, debug=True)
+    app.run(host='0.0.0.0')
