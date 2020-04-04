@@ -1,4 +1,13 @@
-# Remote Ventilator Monitor - Raspberry Pi App
+## Remote Ventilator Monitor - Raspberry Pi App
+
+This git repo is for the code on the **Raspberry Pi**
+
+### Architecture Overview
+| [Heroku Cloud Server & Web Browser Repo](https://github.com/Open-Ventilator-Remote-Monitoring/ventilator-remote-monitoring) | Raspberry Pi (Network Adapter) Repo | [Ventilator (Arduino) Repo](https://github.com/Open-Ventilator-Remote-Monitoring/ventilator-monitor-arduino) |
+| ----------- | ----------- | ----------- |
+| Ruby on Rails | Flask | Arduino Board |
+| Javascript | Python | C++ |
+
 ### Goal
 Create a lightweight Raspberry Pi application to serve as a network adapter to relay data from Arduino-Based ventilators to a central monitoring dashboard (javascript web-browser application).
 
