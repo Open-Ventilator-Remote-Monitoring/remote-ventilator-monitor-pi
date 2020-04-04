@@ -15,5 +15,23 @@ Many of the rapidly manufacturable ventiltor designs utilize and arduino-based c
 3. The flask app receives the data back from the ventilator (Arduino)
 4. The flask app sends the data to the javascript dashboard application
 
-### How do I set up a Raspberry Pi for Development & Testing?
-1. Obtain a raspberry pi. Many raspberry pi's will work, but the [Raspberry Pi 3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/) is widely available for an affordable price (~$ USD). These products are widely avialable, so shop around. [Newark](https://www.newark.com/buy-raspberry-pi) is the main US distributor and currently has about 56,000 [Raspberry Pi 4 Model B](https://www.newark.com/raspberry-pi/rpi4-modbp-4gb/raspberry-pi-4-model-b-4gb-rohs/dp/02AH3164)'s in stock for ~$55 USD each. The Rasperry Pi is power hungry, especially when you have an arduino plugged in, so be sure to pick up a beefy [power supply](https://www.newark.com/MarketingProductList?orderCode=03AH7034,07AH1285,07AH1286,07AH1287) if you don't already have one. Be sure to pick up the correct power supply for your board - the Raspberry Pi Model 4's now use a USB-C power supply instead of the old boards, which use a USB micro power supply. Also note that the new Raspberry Pi 4 uses a mini-HDMI instead of a full size HDMI video cable.
+### What Hardware do I need Development & Testing?
+1. Obtain a Raspberry Pi board. Many raspberry pi's will work, but the [Raspberry Pi 3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/) is widely available for an affordable price (~$ USD). These products are widely avialable, so shop around. [Newark](https://www.newark.com/buy-raspberry-pi) is the main US distributor and currently has about 56,000 [Raspberry Pi 4 Model B](https://www.newark.com/raspberry-pi/rpi4-modbp-4gb/raspberry-pi-4-model-b-4gb-rohs/dp/02AH3164)'s in stock for ~$55 USD each. 
+2. Obtain a power supply and a The Rasperry Pi is power hungry, especially when you have an arduino plugged in, so be sure to pick up a beefy [power supply](https://www.newark.com/MarketingProductList?orderCode=03AH7034,07AH1285,07AH1286,07AH1287) if you don't already have one. Be sure to pick up the correct power supply for your board - the Raspberry Pi Model 4's now use a USB-C power supply instead of the old boards, which use a USB micro power supply. 
+3. If you'll be using a display monitor with your pi (recommended - easier than headless mode) you will need the appropriate HDMI cable. Please note that the Raspberry Pi 4 now uses a mini-HDMI instead of a full size HDMI video cable.
+4. Obtain an SD card - buy a high quality one with a good amount of memory. The Sandick Ultra Plus microSDHC UHS-I 32 GB seems to work nicely.
+5. Obtain an SD card reader if you don't already have one.
+
+### How do I set up my Raspberry Pi for Development & Testing?
+Eventually we'll have pre-deployed images ready for download and quick install onto your SD card. For now, there is a lot of manual work:
+1. Download the [SD Card Formatter](https://www.sdcard.org/downloads/formatter/index.html) tool to your desktop computer and format your SD card.
+2. Download the [Raspberry Pi Imager] for your desktop computer operating system.
+3. Open the Raspberry Pi Imager and install the Rasbian Lite Image onto your SD card
+4. Insert your SD card into your pi, connect your desktop monitor, keyboard, and mouse, and plug your pi into your power supply
+5. When the pi boots, enter the default username: pi and password: raspberry
+6. Either plug your raspberry pi into your local ethernet network or [add your wifi credentials to the wpa_supplicant.conf file](https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md).
+7. The default hostname of the pi is `raspberrypi` which will make your pi accessible on your local network via the url http://www.raspberrypi.local. Here, we will change the host name to `ventilator-1` so the pi will be accessible on our LAN via the url http://www.ventilator-1.local. Change the host name of your raspberry pi using the nano ([new to nano?](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)): `sudo nano /etc/hostname` -> change the host name to `ventilator-1` or similar. Use a different host name for each pi.
+8. Edit the /etc/host file `sudo nano /etc/hosts` and change `raspberrypi` to `ventilator-1`
+9. Update the apt package manager `sudo apt-get update`
+
+Stuck? Leave a message on the Slack Channel and we'll help you out.
