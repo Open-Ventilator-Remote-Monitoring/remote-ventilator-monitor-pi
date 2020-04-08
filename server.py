@@ -7,10 +7,10 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 CORS(app)
 
-ser=serial.Serial('/dev/ttyACM0', 9600, timeout=1)
-ser.flush()
+# ser=serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+# ser.flush()
 
-"""
+
 ventilator = [
     {
         'tidalVolume' : u'500',
@@ -20,7 +20,6 @@ ventilator = [
         'peep' : u'7'
     }
 ]
-"""
 
 @app.route("/")
 def hello():
@@ -31,13 +30,13 @@ def hello():
 @app.route("/api/ventilator", methods=['GET'])
 def get_status():
 
-    #return jsonify({'ventilator': ventilator})
-    ser.write(b"getStats\n")
-    line = ser.readline().decode('utf-8').rstrip()
-    jsonline = json.loads(line)
-    print(line)
-    print(jsonline)
-    return(jsonline)
+    return jsonify({'ventilator': ventilator})
+    # ser.write(b"getStats\n")
+    # line = ser.readline().decode('utf-8').rstrip()
+    # jsonline = json.loads(line)
+    # print(line)
+    # print(jsonline)
+    # return(jsonline)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
