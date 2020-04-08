@@ -34,7 +34,7 @@ Many of the rapidly manufacturable ventiltor designs utilize and arduino-based c
 ### How do I set up my Raspberry Pi for Development & Testing?
 Eventually we'll have pre-deployed images ready for download and quick install onto your SD card. For now, there is a lot of manual work:
 1. Download the [SD Card Formatter](https://www.sdcard.org/downloads/formatter/index.html) tool to your desktop computer and format your SD card.
-2. Download the [Raspberry Pi Imager] for your desktop computer operating system.
+2. Download the [Raspberry Pi Imager](https://www.raspberrypi.org/downloads/) for your desktop computer operating system.
 3. Open the Raspberry Pi Imager and install the Rasbian Lite Image onto your SD card
 4. Insert your SD card into your pi, connect your desktop monitor, keyboard, and mouse, and plug your pi into your power supply
 5. When the pi boots, enter the default username: pi and password: raspberry
