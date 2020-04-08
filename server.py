@@ -1,16 +1,17 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
-import serial
 import json
+
+from serial_service import SerialService
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 CORS(app)
 
-ser=serial.Serial('/dev/ttyACM0', 9600, timeout=1)
-ser.flush()
+serial_service = SerialService(link='/dev/ttyACM0', baud=9600, timeout=1)
+serial_service.start_connection()
 
-"""
+""" `
 ventilator = [
     {
         'tidalVolume' : u'500',
@@ -22,22 +23,24 @@ ventilator = [
 ]
 """
 
+
 @app.route("/")
 def hello():
     return_string = "<h1>Ventilator Network Server</h1>"
     return_string += "<p>Ventilator Stats:</p>"
     return return_string
 
+
 @app.route("/api/ventilator", methods=['GET'])
 def get_status():
-
-    #return jsonify({'ventilator': ventilator})
-    ser.write(b"getStats\n")
-    line = ser.readline().decode('utf-8').rstrip()
-    jsonline = json.loads(line)
+    # return jsonify({'ventilator': ventilator})
+    serial_service.send_message(b"getStats\n")
+    line = serial_service.read_line().decode('utf-8').rstrip()
+    json_line = json.loads(line)
     print(line)
-    print(jsonline)
-    return(jsonline)
+    print(json_line)
+    return json_line
+
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
