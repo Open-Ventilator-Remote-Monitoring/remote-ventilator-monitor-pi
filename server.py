@@ -21,6 +21,7 @@ ventilator = [
 ]
 """
 
+
 @app.route("/")
 def hello():
     return_string = "<h1>Ventilator Network Server</h1>"
