@@ -13,7 +13,7 @@ class RandomVentilator(VentilatorCommunication):
               "Component Malfunction", "Failure"]
 
     def __init__(self, link: str, baud: int, timeout: int) -> None:
-        print(f'Connecting on {link} at baud {baud} with timeout {timeout}')
+        print(f'RandomVentilator configured with {link} at baud {baud} with timeout {timeout}')
 
     def start_connection(self) -> None:
         pass

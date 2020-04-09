@@ -12,7 +12,7 @@ class SerialConnection(VentilatorCommunication):
     def start_connection(self) -> None:
         self.connection.flush()
 
-    def read_line(self) -> VentilatorData:
+    def get_data(self) -> VentilatorData:
         return self.convert(self.connection.readline())
 
     @staticmethod

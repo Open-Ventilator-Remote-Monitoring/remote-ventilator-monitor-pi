@@ -1,2 +1,4 @@
 #!/usr/bin/env sh
-sudo gunicorn --bind 0.0.0.0:80 wsgi:app
+PORT="${FLASK_PORT:-default 8080}"
+echo ${PORT}
+gunicorn --bind 0.0.0.0:${PORT} 'wsgi:create_app()'
