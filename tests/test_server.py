@@ -11,13 +11,9 @@ class Test(TestCase):
             self.app = app.test_client()
 
     def test_get_status(self):
-        self.mock_serial_service.read_line = mock.Mock(return_value=b"""{
-        "tidalVolume" : "500",
-        "respiratoryRate" : "25",
-        "peakInspiratoryPressure" : "70",
-        "ieRatio": "1:3",
-        "peep": "7"
-    }""")
+        self.mock_serial_service.read_line = mock.Mock(return_value=b'{"tidalVolume":"500","respiratoryRate":"25",'
+                                                                    b'"peakInspiratoryPressure" : "70","ieRatio": '
+                                                                    b'"1:3","peep": "7"}')
         response = self.app.get('/api/ventilator', follow_redirects=True)
         self.mock_serial_service.send_message.assert_called_with(b"getStats\n")
         self.assertEqual(response.status_code, 200)
