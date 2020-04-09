@@ -2,14 +2,14 @@ from flask import Flask
 from flask_cors import CORS
 import json
 
-from serial_service import SerialService
+from serial_connection_factory import SerialConnectionFactory
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 CORS(app)
 
-serial_service = SerialService(link='/dev/ttyACM0', baud=9600, timeout=1)
-serial_service.start_connection()
+serial_connection = SerialConnectionFactory.create_serial_connection(link='/dev/ttyACM0', baud=9600, timeout=1)
+serial_connection.start_connection()
 
 """ `
 ventilator = [
@@ -34,8 +34,8 @@ def hello():
 @app.route("/api/ventilator", methods=['GET'])
 def get_status():
     # return jsonify({'ventilator': ventilator})
-    serial_service.send_message(b"getStats\n")
-    line = serial_service.read_line().decode('utf-8').rstrip()
+    serial_connection.send_message(b"getStats\n")
+    line = serial_connection.read_line().decode('utf-8').rstrip()
     json_line = json.loads(line)
     print(line)
     print(json_line)
