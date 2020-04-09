@@ -9,6 +9,7 @@ verify_ssl = true
 flask = "==1.1.2"
 flask-cors = "==3.0.8"
 pyserial = "==3.4"
+flask-restful = "==0.3.8"
 
 [requires]
 python_version = "3.8"

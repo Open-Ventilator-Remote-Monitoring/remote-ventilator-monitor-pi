@@ -9,5 +9,5 @@ class SerialConnectionFactory:
     def create_serial_connection(connection_type: str, config) -> VentilatorCommunication:
         if connection_type == "SERIAL":
             return SerialConnection(config['link'], config['baud'], config['timeout'])
-        elif connection_type == "DEBUG":
+        elif connection_type == "CONSOLE":
             return ConsoleConnection(config['link'], config['baud'], config['timeout'])

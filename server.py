@@ -1,14 +1,37 @@
-import argparse
 import json
 
 from flask import Flask
-from flask_cors import CORS
+from flask_restful import Api, Resource
 
-from serial_connection_factory import SerialConnectionFactory
+from ventilator_communication import VentilatorCommunication
 
-app = Flask(__name__)
-app.config.from_pyfile('config.py')
-CORS(app)
+
+class GetStatus(Resource):
+    def __init__(self, **kwargs):
+        self.serial_connection = kwargs['serial_connection']
+
+    def get(self):
+        line = self.serial_connection.request("getStats\n")
+        print(line)
+        json_line = json.loads(line)
+        print(json_line)
+        return json_line
+
+
+class Server:
+    def __init__(self, app: Flask,  serial_connection: VentilatorCommunication):
+        self.app = app
+        self.api = Api(self.app)
+        self.serial_connection = serial_connection
+
+    def setup_routing(self):
+        self.api.add_resource(GetStatus, '/api/ventilator',
+                              resource_class_kwargs={'serial_connection': self.serial_connection})
+
+    def setup(self):
+        self.serial_connection.start_connection()
+        self.setup_routing()
+
 
 """ `
 ventilator = [
@@ -21,37 +44,3 @@ ventilator = [
     }
 ]
 """
-
-
-@app.route("/")
-def hello():
-    return_string = "<h1>Ventilator Network Server</h1>"
-    return_string += "<p>Ventilator Stats:</p>"
-    return return_string
-
-
-@app.route("/api/ventilator", methods=['GET'])
-def get_status():
-    line = serial_connection.request("getStats\n")
-    json_line = json.loads(line)
-    print(line)
-    print(json_line)
-    return json_line
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--dev',
-                        help='enable running responses through command line',
-                        action="store_true")
-    args = parser.parse_args()
-    config = 'SERIAL'
-    if args.dev:
-        config = 'DEBUG'
-
-    connection_config = {'link': '/dev/ttyACM0', 'baud': 9600, 'timeout': 1}
-
-    serial_connection = SerialConnectionFactory.create_serial_connection(config, connection_config)
-    serial_connection.start_connection()
-
-    app.run(host='0.0.0.0')

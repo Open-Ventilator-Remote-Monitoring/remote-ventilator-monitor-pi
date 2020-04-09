@@ -51,4 +51,8 @@ Eventually we'll have pre-deployed images ready for download and quick install o
 16. Open a web browser on your desktop (connected to the same network as your pi) and visit the url `http://ventilator-1.local` You should see the index info page. 
 17. After you connect your properly programmed Arduino via a USB cable, you should be able to visit `http://ventilator-1.local/api/ventilator` and view JSON result of the latest ventilator stats. Refresh the page to query the Arduino again and get different values.
 
+### How to test using dev mode
+Execute wsgi.py with the flag `--dev` 
+Sample return data `{"tidalVolume" : "500","respiratoryRate" : "25","peakInspiratoryPressure" : "70","ieRatio" : "1:3","peep" : "7"}`
+
 **Having a problem?** Leave a message on the Slack Channel and we'll help you out.
