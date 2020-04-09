@@ -1,46 +1,41 @@
-import json
 
-from flask import Flask
-from flask_restful import Api, Resource
+from flask import Flask, jsonify
+from flask_cors import CORS
+import yaml
+from yaml import Loader
 
-from ventilator_communication import VentilatorCommunication
+from serial_connection_factory import SerialConnectionFactory
 
-
-class GetStatus(Resource):
-    def __init__(self, **kwargs):
-        self.serial_connection = kwargs['serial_connection']
-
-    def get(self):
-        line = self.serial_connection.request("getStats\n")
-        print(line)
-        json_line = json.loads(line)
-        print(json_line)
-        return json_line
+app = Flask(__name__)
+CORS(app)
 
 
-class Server:
-    def __init__(self, app: Flask,  serial_connection: VentilatorCommunication):
-        self.app = app
-        self.api = Api(self.app)
-        self.serial_connection = serial_connection
+@app.before_first_request
+def init():
+    config_file = "application-{}.yml".format(app.config["ENV"])
+    try:
+        with open(config_file) as file:
+            config = yaml.load(file, Loader=Loader)
+            print(config)
+            print(f'Config loaded from {config_file}')
+    except OSError:
+        print(f'Warning, could not load configuration {config_file}')
 
-    def setup_routing(self):
-        self.api.add_resource(GetStatus, '/api/ventilator',
-                              resource_class_kwargs={'serial_connection': self.serial_connection})
-
-    def setup(self):
-        self.serial_connection.start_connection()
-        self.setup_routing()
+    global serial_connection
+    serial_connection = SerialConnectionFactory.create_serial_connection(config['ventilator']['connection'])
+    serial_connection.start_connection()
 
 
-""" `
-ventilator = [
-    {
-        'tidalVolume' : u'500',
-        'respiratoryRate' : u'25',
-        'peakInspiratoryPressure' : u'70',
-        'ieRatio' : u'1:3',
-        'peep' : u'7'
-    }
-]
-"""
+@app.route("/")
+def hello():
+    return_string = "<h1>Ventilator Network Server</h1>"
+    return_string += "<p>Ventilator Stats:</p>"
+    return return_string
+
+
+@app.route("/api/ventilator", methods=['GET'])
+def get_status():
+    global serial_connection
+    data = serial_connection.read_line()
+    return jsonify({'ventilator': [data.__dict__]})
+
