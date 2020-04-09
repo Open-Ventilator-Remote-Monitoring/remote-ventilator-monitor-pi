@@ -1,5 +1,7 @@
 from unittest import TestCase, mock
+
 import server
+
 
 class Test(TestCase):
     @mock.patch('serial_connection.SerialConnection', autospec=True)
@@ -13,7 +15,7 @@ class Test(TestCase):
     def test_get_status(self):
         self.mock_serial_connection.configure_mock(**{
             'request.return_value': b'{"tidalVolume":"500","respiratoryRate":"25","peakInspiratoryPressure"'
-                                      b' : "70","ieRatio": "1:3","peep": "7"}'})
+                                    b' : "70","ieRatio": "1:3","peep": "7"}'})
         response = self.app.get('/api/ventilator', follow_redirects=True)
         self.mock_serial_connection.request.assert_called_with("getStats\n")
         self.assertEqual(response.status_code, 200)

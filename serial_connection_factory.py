@@ -11,4 +11,3 @@ class SerialConnectionFactory:
             return SerialConnection(config['link'], config['baud'], config['timeout'])
         elif connection_type == "DEBUG":
             return ConsoleConnection(config['link'], config['baud'], config['timeout'])
-

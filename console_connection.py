@@ -13,4 +13,3 @@ class ConsoleConnection(VentilatorCommunication):
     def read_line(self) -> bytes:
         print('Request Came in, enter reply')
         return input().encode('utf-8')
-

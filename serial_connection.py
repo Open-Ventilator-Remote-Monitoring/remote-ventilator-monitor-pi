@@ -17,4 +17,3 @@ class SerialConnection(VentilatorCommunication):
 
     def read_line(self) -> bytes:
         return self.connection.readline()
-

@@ -1,7 +1,8 @@
+import argparse
+import json
+
 from flask import Flask
 from flask_cors import CORS
-import json
-import argparse
 
 from serial_connection_factory import SerialConnectionFactory
 
