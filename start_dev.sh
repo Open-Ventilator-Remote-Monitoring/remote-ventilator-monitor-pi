@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-flask run
+FLASK_ENV=development flask run
