@@ -1,2 +1,5 @@
-# wsgi:create_app(config="CONSOLE") if you want to run on desktop
-gunicorn --bind 0.0.0.0:8080 'wsgi:create_app()'
+#!/usr/bin/env sh
+PORT="${FLASK_PORT:-8080}"
+LISTEN="${FLASK_LISTEN:-0.0.0.0}"
+echo listening on ${LISTEN}:${PORT}
+gunicorn --bind ${LISTEN}:${PORT} 'wsgi:create_app()'

@@ -1,6 +1,5 @@
-import json
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_restful import Api, Resource
 
 from ventilator_communication import VentilatorCommunication
@@ -11,11 +10,7 @@ class GetStatus(Resource):
         self.serial_connection = kwargs['serial_connection']
 
     def get(self):
-        line = self.serial_connection.request("getStats\n")
-        print(line)
-        json_line = json.loads(line)
-        print(json_line)
-        return json_line
+        return jsonify({'ventilator': [self.serial_connection.get_data().__dict__]})
 
 
 class Server:
@@ -32,15 +27,3 @@ class Server:
         self.serial_connection.start_connection()
         self.setup_routing()
 
-
-""" `
-ventilator = [
-    {
-        'tidalVolume' : u'500',
-        'respiratoryRate' : u'25',
-        'peakInspiratoryPressure' : u'70',
-        'ieRatio' : u'1:3',
-        'peep' : u'7'
-    }
-]
-"""

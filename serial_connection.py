@@ -1,6 +1,6 @@
 import serial
 
-from ventilator_communication import VentilatorCommunication
+from ventilator_communication import VentilatorCommunication, VentilatorData
 
 
 class SerialConnection(VentilatorCommunication):
@@ -12,8 +12,17 @@ class SerialConnection(VentilatorCommunication):
     def start_connection(self) -> None:
         self.connection.flush()
 
-    def send_message(self, byte_string: bytes) -> None:
-        self.connection.write(byte_string)
+    def get_data(self) -> VentilatorData:
+        return self.convert(self.connection.readline())
 
-    def read_line(self) -> bytes:
-        return self.connection.readline()
+    @staticmethod
+    def convert(bytes) -> VentilatorData:
+        # TODO need to get this from the cached data coming off the serial port
+        return VentilatorData(
+            tidal_volume=500,
+            respirator_rate=25,
+            peak_inspiratory_pressure=70,
+            ie_ratio="1:3",
+            peep=7,
+            alarms={}
+        )
