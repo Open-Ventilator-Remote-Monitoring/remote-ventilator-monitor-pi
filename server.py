@@ -9,7 +9,6 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 CORS(app)
 
-
 """ `
 ventilator = [
     {
@@ -22,7 +21,6 @@ ventilator = [
 ]
 """
 
-
 @app.route("/")
 def hello():
     return_string = "<h1>Ventilator Network Server</h1>"
@@ -32,8 +30,7 @@ def hello():
 
 @app.route("/api/ventilator", methods=['GET'])
 def get_status():
-    serial_connection.send_message(b"getStats\n")
-    line = serial_connection.read_line().decode('utf-8').rstrip()
+    line = serial_connection.request("getStats\n")
     json_line = json.loads(line)
     print(line)
     print(json_line)
@@ -50,8 +47,9 @@ if __name__ == "__main__":
     if args.dev:
         config = 'DEBUG'
 
-    serial_connection = SerialConnectionFactory.create_serial_connection(config, {'link': '/dev/ttyACM0', 'baud': 9600,
-                                                                                   'timeout': 1})
+    connection_config = {'link': '/dev/ttyACM0', 'baud': 9600, 'timeout': 1}
+
+    serial_connection = SerialConnectionFactory.create_serial_connection(config, connection_config)
     serial_connection.start_connection()
 
     app.run(host='0.0.0.0')
