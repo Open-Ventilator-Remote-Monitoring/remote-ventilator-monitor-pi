@@ -1,26 +1,29 @@
-import argparse
-import json
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
+import yaml
+from yaml import Loader
 
 from serial_connection_factory import SerialConnectionFactory
 
 app = Flask(__name__)
-app.config.from_pyfile('config.py')
 CORS(app)
 
-""" `
-ventilator = [
-    {
-        'tidalVolume' : u'500',
-        'respiratoryRate' : u'25',
-        'peakInspiratoryPressure' : u'70',
-        'ieRatio' : u'1:3',
-        'peep' : u'7'
-    }
-]
-"""
+
+@app.before_first_request
+def init():
+    config_file = "application-{}.yml".format(app.config["ENV"])
+    try:
+        with open(config_file) as file:
+            config = yaml.load(file, Loader=Loader)
+            print(config)
+            print(f'Config loaded from {config_file}')
+    except OSError:
+        print(f'Warning, could not load configuration {config_file}')
+
+    global serial_connection
+    serial_connection = SerialConnectionFactory.create_serial_connection(config['ventilator']['connection'])
+    serial_connection.start_connection()
 
 
 @app.route("/")
@@ -32,26 +35,10 @@ def hello():
 
 @app.route("/api/ventilator", methods=['GET'])
 def get_status():
-    line = serial_connection.request("getStats\n")
-    json_line = json.loads(line)
-    print(line)
-    print(json_line)
-    return json_line
+    global serial_connection
+    data = serial_connection.read_line()
+    return jsonify({'ventilator': [data.__dict__]})
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--dev',
-                        help='enable running responses through command line',
-                        action="store_true")
-    args = parser.parse_args()
-    config = 'SERIAL'
-    if args.dev:
-        config = 'DEBUG'
-
-    connection_config = {'link': '/dev/ttyACM0', 'baud': 9600, 'timeout': 1}
-
-    serial_connection = SerialConnectionFactory.create_serial_connection(config, connection_config)
-    serial_connection.start_connection()
-
     app.run(host='0.0.0.0')
