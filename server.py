@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 import json
+import argparse
 
 from serial_connection_factory import SerialConnectionFactory
 
@@ -8,8 +9,6 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 CORS(app)
 
-serial_connection = SerialConnectionFactory.create_serial_connection(link='/dev/ttyACM0', baud=9600, timeout=1)
-serial_connection.start_connection()
 
 """ `
 ventilator = [
@@ -33,7 +32,6 @@ def hello():
 
 @app.route("/api/ventilator", methods=['GET'])
 def get_status():
-    # return jsonify({'ventilator': ventilator})
     serial_connection.send_message(b"getStats\n")
     line = serial_connection.read_line().decode('utf-8').rstrip()
     json_line = json.loads(line)
@@ -43,4 +41,17 @@ def get_status():
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--dev',
+                        help='enable running responses through command line',
+                        action="store_true")
+    args = parser.parse_args()
+    config = 'SERIAL'
+    if args.dev:
+        config = 'DEBUG'
+
+    serial_connection = SerialConnectionFactory.create_serial_connection(config, {'link': '/dev/ttyACM0', 'baud': 9600,
+                                                                                   'timeout': 1})
+    serial_connection.start_connection()
+
     app.run(host='0.0.0.0')

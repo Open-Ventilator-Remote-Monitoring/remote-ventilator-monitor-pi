@@ -1,11 +1,13 @@
 import serial
 
+from ventilator_communication import VentilatorCommunication
 
-class SerialConnection:
+
+class SerialConnection(VentilatorCommunication):
     connection: serial.Serial
 
-    def __init__(self, serial_connection: serial.Serial) -> None:
-        self.connection = serial_connection
+    def __init__(self, link: str, baud: int, timeout: int) -> None:
+        self.connection = serial.Serial(link, baud, timeout)
 
     def start_connection(self) -> None:
         self.connection.flush()
