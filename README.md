@@ -55,8 +55,17 @@ Eventually we'll have pre-deployed images ready for download and quick install o
 
 If you would like to run the web UI and hit a local simulation interface, make sure you have
 all the dependencies installed:
-1. `pip install flask flask-cors pyserial pyyaml`
+1. `pip install flask flask-cors flask-pyserial pyyaml` or `pivenv install`
 2. Run the dev start script: `./start_dev.sh`
 3. You should now be able to hit `localhost:5000/api/ventilator` and get the JSON response back.
+
+You can also run it under the gunicorn script in dev mode:
+
+`FLASK_ENV=development ./start.sh`
+
+The `start.sh` script supports two environmental variables, FLASK_PORT and FLASK_LISTEN, if you need
+to customize the port and listen address of the app, like this:
+
+`FLASK_ENV=development FLASK_LISTEN=192.168.0.1 FLASK_PORT=8282 ./start.sh`
 
 **Having a problem?** Leave a message on the Slack Channel and we'll help you out.
