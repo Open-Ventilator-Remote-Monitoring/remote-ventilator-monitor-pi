@@ -10,7 +10,8 @@ class ServerConfigurationException(Exception):
     def __init__(self, message):
         super().__init__(message)
 
-def create_app(**kwargs):
+
+def create_app():
     server_app = Flask(__name__)
     CORS(server_app)
 
@@ -18,8 +19,9 @@ def create_app(**kwargs):
     try:
         with open(config_file) as file:
             yaml_config = yaml.load(file, Loader=yaml.Loader)
-            print(yaml_config)
             print(f'Config loaded from {config_file}')
+            if server_app.config["ENV"] == "development":
+                print(yaml_config)
     except OSError:
         raise ServerConfigurationException(f'Error, could not load configuration {config_file}')
 
