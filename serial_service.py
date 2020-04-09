@@ -15,7 +15,7 @@ class SerialService:
         self.connection.flush()
 
     def send_message(self, byte_string: bytes):
-        self.connection.write(bytes)
+        self.connection.write(byte_string)
 
     def read_line(self) -> bytes:
         return self.connection.readline()
