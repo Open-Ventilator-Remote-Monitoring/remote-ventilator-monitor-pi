@@ -1,12 +1,10 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "83167f6feb3d9380d731900903e7813d83eb1776df8e7960bb7695daad360198"
+            "sha256": "421ae0e17c27589fb9c65cc83df595f29e32900f74d6c7e0260c8b2c110747d2"
         },
         "pipfile-spec": 6,
-        "requires": {
-            "python_version": "3.8"
-        },
+        "requires": {},
         "sources": [
             {
                 "name": "pypi",

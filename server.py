@@ -10,7 +10,7 @@ class GetStatus(Resource):
         self.serial_connection = kwargs['serial_connection']
 
     def get(self):
-        return jsonify({'ventilator': [self.serial_connection.get_data().__dict__]})
+        return jsonify({'ventilator': [self.serial_connection.get_data().to_camelcase_dict()]})
 
 
 class Server:
