@@ -1,19 +1,22 @@
 import serial
 
+from open_ventilator_monitor_pi.serial_monitor.serial_monitor_handler import SerialMonitorHandler
 from ventilator_communication import VentilatorCommunication, VentilatorData
 
 
 class SerialConnection(VentilatorCommunication):
     connection: serial.Serial
+    serial_monitor_handler: SerialMonitorHandler
 
-    def __init__(self, link: str, baud: int, timeout: int) -> None:
+    def __init__(self, link: str, baud: int, timeout: int, serial_monitor_handler: SerialMonitorHandler) -> None:
         self.connection = serial.Serial(link, baud, timeout)
+        self.serial_monitor_handler = serial_monitor_handler
 
     def start_connection(self) -> None:
         self.connection.flush()
 
     def get_data(self) -> VentilatorData:
-        return self.convert(self.connection.readline())
+        return self.serial_monitor_handler.get_current_data()
 
     @staticmethod
     def convert(bytes) -> VentilatorData:
