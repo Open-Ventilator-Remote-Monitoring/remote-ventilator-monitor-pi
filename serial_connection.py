@@ -20,7 +20,7 @@ class SerialConnection(VentilatorCommunication):
         # TODO need to get this from the cached data coming off the serial port
         return VentilatorData(
             tidal_volume=500,
-            respirator_rate=25,
+            respiratory_rate=25,
             peak_inspiratory_pressure=70,
             ie_ratio="1:3",
             peep=7,

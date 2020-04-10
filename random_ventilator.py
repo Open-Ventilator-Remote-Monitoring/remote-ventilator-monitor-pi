@@ -21,7 +21,7 @@ class RandomVentilator(VentilatorCommunication):
     def get_data(self) -> VentilatorData:
         return VentilatorData(
             tidal_volume=random.randint(100, 1500),
-            respirator_rate=random.randint(10, 60),
+            respiratory_rate=random.randint(10, 60),
             peak_inspiratory_pressure=random.randint(20, 120),
             ie_ratio=random.choice(RandomVentilator.ie_ratio_values),
             peep=random.randint(1, 3),
