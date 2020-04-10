@@ -10,7 +10,11 @@ class SerialConnection(VentilatorCommunication):
     serial_monitor_handler: SerialMonitorHandler
 
     def __init__(self, link: str, baud: int, timeout: int) -> None:
-        self.connection = serial.Serial(link, baud, timeout)
+        self.connection = serial.Serial(port=link,
+                                        baudrate=baud,
+                                        timeout=timeout,
+                                        stopbits=serial.STOPBITS_ONE,
+                                        bytesize=serial.EIGHTBITS)
         self.serial_monitor_handler = SerialMonitorHandler()
         self.serial_monitor_listener = SerialMonitorListener(self, self.connection, self.serial_monitor_handler)
 
@@ -19,19 +23,8 @@ class SerialConnection(VentilatorCommunication):
         self.serial_monitor_listener.start()
 
     def stop_connection(self) -> None:
-        pass
+        self.serial_monitor_listener.stop()
+        self.serial_monitor_listener.join()
 
     def get_data(self) -> VentilatorData:
         return self.serial_monitor_handler.get_current_data()
-
-    @staticmethod
-    def convert(bytes) -> VentilatorData:
-        # TODO need to get this from the cached data coming off the serial port
-        return VentilatorData(
-            tidal_volume=500,
-            respirator_rate=25,
-            peak_inspiratory_pressure=70,
-            ie_ratio="1:3",
-            peep=7,
-            alarms={}
-        )

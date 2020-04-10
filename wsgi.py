@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
 import yaml
+from signal import signal, SIGINT
+from sys import exit
 
 from serial_connection_factory import SerialConnectionFactory
 from server import Server
@@ -12,6 +14,7 @@ class ServerConfigurationException(Exception):
 
 
 def create_app():
+
     server_app = Flask(__name__)
     CORS(server_app)
 
@@ -26,10 +29,17 @@ def create_app():
         raise ServerConfigurationException(f'Error, could not load configuration {config_file}')
 
     serial_connection = SerialConnectionFactory.create_serial_connection(yaml_config['ventilator']['connection'])
-    serial_connection.start_connection()
 
     server = Server(app=server_app, serial_connection=serial_connection)
     server.setup()
+
+    def handler(signal_received, frame):
+        # Handle any cleanup here
+        print('SIGINT or CTRL-C detected. Exiting gracefully')
+        server.shut_down()
+        exit(0)
+
+    signal(SIGINT, handler)
 
     return server_app
 

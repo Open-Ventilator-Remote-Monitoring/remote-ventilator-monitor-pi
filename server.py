@@ -27,3 +27,6 @@ class Server:
         self.serial_connection.start_connection()
         self.setup_routing()
 
+    def shut_down(self):
+        self.serial_connection.stop_connection()
+
