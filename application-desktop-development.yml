@@ -1,5 +1,5 @@
 ventilator:
-  name: Random-Ventilator-1
+  name: Local-Dev-Ventilator-1
   connection:
     type: serial
     link: /dev/ttyS4
