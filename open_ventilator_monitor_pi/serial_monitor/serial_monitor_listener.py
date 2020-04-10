@@ -18,6 +18,8 @@ class SerialMonitorListener(Thread):
         left_byte = ord(self.serial_connection.read(1))
         return (left_byte << 8) + right_byte
 
+    def stop(self) -> None: pass
+
     def run(self) -> None:
 
         count = 0
