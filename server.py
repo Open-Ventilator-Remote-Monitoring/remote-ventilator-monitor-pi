@@ -10,7 +10,13 @@ class GetStatus(Resource):
         self.serial_connection = kwargs['serial_connection']
 
     def get(self):
-        return jsonify({'ventilator': [self.serial_connection.get_data().to_camelcase_dict()]})
+        current_data = self.serial_connection.get_data()
+        if current_data:
+            return jsonify({'ventilator': [current_data.to_camelcase_dict()]})
+        else:
+            return jsonify({'ventilator': []})
+
+
 
 
 class Server:
