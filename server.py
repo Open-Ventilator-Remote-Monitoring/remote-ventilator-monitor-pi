@@ -1,43 +1,38 @@
+
 from flask import Flask, jsonify
-from flask_cors import CORS
-import serial
-import json
+from flask_restful import Api, Resource
 
-app = Flask(__name__)
-app.config.from_pyfile('config.py')
-CORS(app)
+from ventilator_communication import VentilatorCommunication
 
-ser=serial.Serial('/dev/ttyACM0', 9600, timeout=1)
-ser.flush()
 
-"""
-ventilator = [
-    {
-        'tidalVolume' : u'500',
-        'respiratoryRate' : u'25',
-        'peakInspiratoryPressure' : u'70',
-        'ieRatio' : u'1:3',
-        'peep' : u'7'
-    }
-]
-"""
+class GetStatus(Resource):
+    def __init__(self, **kwargs):
+        self.serial_connection = kwargs['serial_connection']
 
-@app.route("/")
-def hello():
-    return_string = "<h1>Ventilator Network Server</h1>"
-    return_string += "<p>Ventilator Stats:</p>"
-    return return_string
+    def get(self):
+        current_data = self.serial_connection.get_data()
+        if current_data:
+            return jsonify({'ventilator': [current_data.to_camelcase_dict()]})
+        else:
+            return jsonify({'ventilator': []})
 
-@app.route("/api/ventilator", methods=['GET'])
-def get_status():
 
-    #return jsonify({'ventilator': ventilator})
-    ser.write(b"getStats\n")
-    line = ser.readline().decode('utf-8').rstrip()
-    jsonline = json.loads(line)
-    print(line)
-    print(jsonline)
-    return(jsonline)
 
-if __name__ == "__main__":
-    app.run(host='0.0.0.0')
+
+class Server:
+    def __init__(self, app: Flask,  serial_connection: VentilatorCommunication):
+        self.app = app
+        self.api = Api(self.app)
+        self.serial_connection = serial_connection
+
+    def setup_routing(self):
+        self.api.add_resource(GetStatus, '/api/ventilator',
+                              resource_class_kwargs={'serial_connection': self.serial_connection})
+
+    def setup(self):
+        self.serial_connection.start_connection()
+        self.setup_routing()
+
+    def shut_down(self):
+        self.serial_connection.stop_connection()
+

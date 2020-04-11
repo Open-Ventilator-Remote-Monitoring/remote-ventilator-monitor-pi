@@ -1,0 +1,7 @@
+ventilator:
+  name: Local-Dev-Ventilator-1
+  connection:
+    type: serial
+    link: /dev/ttyS4
+    baud: 9600
+    timeout: 1
