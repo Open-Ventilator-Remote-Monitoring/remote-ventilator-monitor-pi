@@ -22,3 +22,5 @@ class VentilatorCommunication:
     def start_connection(self) -> None: pass
 
     def get_data(self) -> VentilatorData: pass
+
+    def stop_connection(self) -> None: pass
