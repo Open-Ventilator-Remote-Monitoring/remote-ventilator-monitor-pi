@@ -61,7 +61,7 @@ class SerialMonitorListener(Thread):
                     if expected_checksum & checksum == 0:
                         self.serial_monitor_handler.update(VentilatorData(
                             tidal_volume=tidal_volume,
-                            respirator_rate=respiratory_rate,
+                            respiratory_rate=respiratory_rate,
                             peak_inspiratory_pressure=peak_inspiratory_pressure,
                             ie_ratio=ie_ratio,
                             peep=peep,
