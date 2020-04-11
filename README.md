@@ -18,11 +18,7 @@ This software is currently only a concept - it is neither approved nor intended 
 Many of the rapidly manufacturable ventiltor designs utilize and arduino-based control system which does not have a network interface. The raspberry pi provides this network interface, serving as an API endpoint which can connect to central monitoring dashboard (javascript web-browser application). Raspberry pi's are cheap, easy to program, available in large quantities, locally sourceable, and reliable (by consumer hardwarwe standards).
 
 ### Current State of the App
-**As of 3-April-2020:** Currently, the app is in demo/testing mode only. The server consists of a python flask app. A typical data request from the dashboard is handled like this: 
-1. The flask app receives a request from the javascript dashboard application
-2. The flask app sends a request to the ventilator (Arduino) for data via the USB serial cable
-3. The flask app receives the data back from the ventilator (Arduino)
-4. The flask app sends the data to the javascript dashboard application
+**As of 11-April-2020:** Currently, the app is in demo/testing mode only.
 
 ### What Hardware do I need Development & Testing?
 1. Obtain a Raspberry Pi board. Many raspberry pi's will work, but the [Raspberry Pi 3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/) is widely available for an affordable price (~$ USD). These products are widely avialable, so shop around. [Newark](https://www.newark.com/buy-raspberry-pi) is the main US distributor and currently has about 56,000 [Raspberry Pi 4 Model B](https://www.newark.com/raspberry-pi/rpi4-modbp-4gb/raspberry-pi-4-model-b-4gb-rohs/dp/02AH3164)'s in stock for ~$55 USD each. 
@@ -47,9 +43,11 @@ Eventually we'll have pre-deployed images ready for download and quick install o
 12. Install our application dependencies `sudo pip3 install flask flask-cors pyserial`
 13. Clone this git repo: `git clone https://github.com/Open-Ventilator-Remote-Monitoring/remote-ventilator-monitor-pi.git`
 14. `cd remote-ventilator-monitor-pi`
-15. Start the server using the start script: `./start.sh` (You may need to run `chmod 777 start.sh` first).
-16. Open a web browser on your desktop (connected to the same network as your pi) and visit the url `http://ventilator-1.local` You should see the index info page. 
-17. After you connect your properly programmed Arduino via a USB cable, you should be able to visit `http://ventilator-1.local/api/ventilator` and view JSON result of the latest ventilator stats. Refresh the page to query the Arduino again and get different values.
+15. Intall the python dependencies for the virtual environment `pipenv install`
+16. Open a virtual environment `sudo pipenv shell`
+17. Start the server using the start script: `FLASK_ENV=development FLASK_PORT=80 ./start.sh` (You may need to run `chmod 777 start.sh` first).
+18. Open a web browser on your desktop (connected to the same network as your pi) and visit the url `http://ventilator-1.local` You should see the index info page. 
+19. After you connect your properly programmed Arduino via a USB cable, you should be able to visit `http://ventilator-1.local/api/ventilator` and view JSON result of the latest ventilator stats. Refresh the page to query the Arduino again and get different values.
 
 ### Local Simulation
 
@@ -66,6 +64,4 @@ You can also run it under the gunicorn script in dev mode:
 The `start.sh` script supports two environmental variables, FLASK_PORT and FLASK_LISTEN, if you need
 to customize the port and listen address of the app, like this:
 
-`FLASK_ENV=development FLASK_LISTEN=192.168.0.1 FLASK_PORT=8282 ./start.sh`
-
-**Having a problem?** Leave a message on the Slack Channel and we'll help you out.
+**Having a problem?** Leave a message on the Slack Channel or an issue on the Github and we'll help you out.
