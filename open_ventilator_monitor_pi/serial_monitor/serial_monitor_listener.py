@@ -3,14 +3,13 @@ from threading import Thread
 from serial import Serial, SerialTimeoutException
 
 from open_ventilator_monitor_pi.serial_monitor.serial_monitor_handler import SerialMonitorHandler
-from ventilator_communication import VentilatorCommunication, VentilatorData
+from ventilator_communication import VentilatorData
 
 
 class SerialMonitorListener(Thread):
-    def __init__(self, ventilator_communication: VentilatorCommunication, serial_connection: Serial, serial_monitor_handler: SerialMonitorHandler):
+    def __init__(self, serial_connection: Serial, serial_monitor_handler: SerialMonitorHandler):
         super(SerialMonitorListener, self).__init__()
         self.serial_connection = serial_connection
-        self.ventilator_communication = ventilator_communication
         self.serial_monitor_handler = serial_monitor_handler
         self.is_running = False
 
@@ -58,7 +57,7 @@ class SerialMonitorListener(Thread):
                     expected_checksum += self._calc_checksum_int_16(peep)
 
                     checksum = self._read_int_8()
-                    if expected_checksum & checksum == 0:
+                    if (~expected_checksum % 256) ^ checksum == 0:
                         self.serial_monitor_handler.update(VentilatorData(
                             tidal_volume=tidal_volume,
                             respiratory_rate=respiratory_rate,
