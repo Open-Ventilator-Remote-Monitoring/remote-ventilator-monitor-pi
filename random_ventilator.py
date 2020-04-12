@@ -1,3 +1,4 @@
+import time
 
 from ventilator_communication import VentilatorCommunication, VentilatorData
 import random
@@ -26,6 +27,7 @@ class RandomVentilator(VentilatorCommunication):
             ie_ratio=random.choice(RandomVentilator.ie_ratio_values),
             peep=random.randint(1, 3),
             alarms=self.randomize_alarms(),
+            timestamp=time.time()
         )
 
     @staticmethod

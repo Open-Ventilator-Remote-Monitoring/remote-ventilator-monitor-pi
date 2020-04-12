@@ -12,7 +12,15 @@ class GetStatus(Resource):
     def get(self):
         current_data = self.serial_connection.get_data()
         if current_data:
-            return jsonify({'ventilator': [current_data.to_camelcase_dict()]})
+            return jsonify({'ventilator': [{
+                'tidalVolume': current_data.tidal_volume,
+                'respiratoryRate': current_data.respiratory_rate,
+                'peakInspiratoryPressure': current_data.peak_inspiratory_pressure,
+                'ieRatio': current_data.ie_ratio,
+                'peep': current_data.peep,
+                'alarms': current_data.alarms,
+                'timestamp': current_data.timestamp
+            }]})
         else:
             return jsonify({'ventilator': []})
 
