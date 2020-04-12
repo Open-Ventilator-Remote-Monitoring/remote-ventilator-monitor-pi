@@ -1,3 +1,4 @@
+import time
 from threading import Thread
 
 from serial import Serial, SerialTimeoutException
@@ -64,7 +65,8 @@ class SerialMonitorListener(Thread):
                             peak_inspiratory_pressure=peak_inspiratory_pressure,
                             ie_ratio=ie_ratio,
                             peep=peep,
-                            alarms={}
+                            alarms={},
+                            timestamp=time.time()
                         ))
                 elif x == header:
                     count += 1
