@@ -4,7 +4,7 @@ import yaml
 from signal import signal, SIGINT
 from sys import exit
 
-from serial_connection_factory import SerialConnectionFactory
+from open_ventilator_monitor_pi.serial_connection.serial_connection_factory import SerialConnectionFactory
 from server import Server
 
 

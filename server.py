@@ -5,7 +5,7 @@ from flask_restful import Api, Resource
 from ventilator_communication import VentilatorCommunication
 
 
-class GetStatus(Resource):
+class VentilatorStatus(Resource):
     def __init__(self, **kwargs):
         self.serial_connection = kwargs['serial_connection']
 
@@ -24,17 +24,26 @@ class GetStatus(Resource):
         else:
             return jsonify({'ventilator': []})
 
+class SoundStatus(Resource):
+    def __init__(self, **kwargs):
+        pass
+    def get(self):
+        current_data = False
+        return jsonify({
+            'status': current_data,
+        })
+
 
 
 
 class Server:
-    def __init__(self, app: Flask,  serial_connection: VentilatorCommunication):
+    def __init__(self, app: Flask,  serial_connection: VentilatorCommunication, sound_serive):
         self.app = app
         self.api = Api(self.app)
         self.serial_connection = serial_connection
 
     def setup_routing(self):
-        self.api.add_resource(GetStatus, '/api/ventilator',
+        self.api.add_resource(VentilatorStatus, '/api/ventilator',
                               resource_class_kwargs={'serial_connection': self.serial_connection})
 
     def setup(self):

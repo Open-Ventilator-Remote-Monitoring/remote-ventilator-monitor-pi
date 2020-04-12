@@ -4,8 +4,8 @@ from unittest import TestCase, mock
 class TestGetStatus(TestCase):
     @mock.patch('serial_connection.SerialConnection', autospec=True)
     def setUp(self, mock_serial_connection) -> None:
-        from server import GetStatus
-        self.get_status = GetStatus(**{'serial_connection': mock_serial_connection})
+        from server import VentilatorStatus
+        self.get_status = VentilatorStatus(**{'serial_connection': mock_serial_connection})
         self.mock_serial_connection = mock_serial_connection
 
     def test_get_status(self):

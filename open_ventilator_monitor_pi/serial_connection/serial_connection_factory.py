@@ -3,7 +3,7 @@ import serial
 from open_ventilator_monitor_pi.serial_monitor.serial_monitor_handler import SerialMonitorHandler
 from open_ventilator_monitor_pi.serial_monitor.serial_monitor_listener import SerialMonitorListener
 from random_ventilator import RandomVentilator
-from serial_connection import SerialConnection
+from open_ventilator_monitor_pi.serial_connection.serial_connection import SerialConnection
 from ventilator_communication import VentilatorCommunication
 
 
