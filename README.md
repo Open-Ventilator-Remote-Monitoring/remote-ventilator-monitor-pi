@@ -38,16 +38,17 @@ Eventually we'll have pre-deployed images ready for download and quick install o
 7. The default hostname of the pi is `raspberrypi` which will make your pi accessible on your local network via the url http://www.raspberrypi.local. Here, we will change the host name to `ventilator-1` so the pi will be accessible on our LAN via the url http://www.ventilator-1.local. Change the host name of your raspberry pi using the nano ([new to nano?](https://www.howtogeek.com/howto/42980/the-beginners-guide-to-nano-the-linux-command-line-text-editor/)): `sudo nano /etc/hostname` -> change the host name to `ventilator-1` or similar. Use a different host name for each pi.
 8. Edit the /etc/host file `sudo nano /etc/hosts` and change `raspberrypi` to `ventilator-1`
 9. Update the apt package manager `sudo apt-get update`
-10. Install git `sudo apt-get install git`
-11. Install the python 3 package manager `sudo apt-get install python3-pip`
-12. Install our application dependencies `sudo pip3 install flask flask-cors pyserial`
-13. Clone this git repo: `git clone https://github.com/Open-Ventilator-Remote-Monitoring/remote-ventilator-monitor-pi.git`
-14. `cd remote-ventilator-monitor-pi`
-15. Intall the python dependencies for the virtual environment `pipenv install`
-16. Open a virtual environment `sudo pipenv shell`
-17. Start the server using the start script: `FLASK_ENV=development FLASK_PORT=80 ./start.sh` (You may need to run `chmod 777 start.sh` first).
-18. Open a web browser on your desktop (connected to the same network as your pi) and visit the url `http://ventilator-1.local` You should see the index info page. 
-19. After you connect your properly programmed Arduino via a USB cable, you should be able to visit `http://ventilator-1.local/api/ventilator` and view JSON result of the latest ventilator stats. Refresh the page to query the Arduino again and get different values.
+10. Install git: `sudo apt-get install git`
+11. Install the python 3 package manager: `sudo apt-get install python3-pip`
+12. Install pipenv: `sudo apt-get install pipenv`
+13. Install our application dependencies `sudo pip3 install flask flask-cors pyserial`
+14. Clone this git repo: `git clone https://github.com/Open-Ventilator-Remote-Monitoring/remote-ventilator-monitor-pi.git`
+15. `cd remote-ventilator-monitor-pi`
+16. Intall the python dependencies for the virtual environment `pipenv install`
+17. Open a virtual environment `sudo pipenv shell`
+18. Start the server using the start script: `FLASK_ENV=development FLASK_PORT=80 ./start.sh` (You may need to run `chmod 777 start.sh` first).
+19. Open a web browser on your desktop (connected to the same network as your pi) and visit the url `http://ventilator-1.local` You should see the index info page. 
+20. After you connect your properly programmed Arduino via a USB cable, you should be able to visit `http://ventilator-1.local/api/ventilator` and view JSON result of the latest ventilator stats. Refresh the page to query the Arduino again and get different values.
 
 ### Local Simulation
 
