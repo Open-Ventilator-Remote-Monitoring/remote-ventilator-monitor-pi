@@ -1,7 +1,7 @@
 ventilator:
   name: Local-Dev-Ventilator-1
   connection:
-    type: serial
+    type: random
     link: COM4
     baud: 9600
     timeout: 1
