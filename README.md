@@ -65,4 +65,8 @@ You can also run it under the gunicorn script in dev mode:
 The `start.sh` script supports two environmental variables, FLASK_PORT and FLASK_LISTEN, if you need
 to customize the port and listen address of the app, like this:
 
+### Using the pre-built SD Card Image
+* Flask server code folder: /opt/remote-ventilator-monitor
+
+
 **Having a problem?** Leave a message on the Slack Channel or an issue on the Github and we'll help you out.
