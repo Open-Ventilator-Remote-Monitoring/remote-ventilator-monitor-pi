@@ -14,10 +14,8 @@ class SerialMonitorHandler:
         self.publisher = publisher
 
     def update(self, ventilator_data: VentilatorData):
-        print('here')
         with self.lock:
             self.current_data = ventilator_data
-        print('here1')
         self.publisher.dispatch('ventilator', json.dumps(
             {
                 'type': 'ventilatorData',

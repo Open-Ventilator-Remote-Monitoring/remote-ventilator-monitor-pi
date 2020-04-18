@@ -36,9 +36,8 @@ def create_app():
     ssl_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
     ssl_context.check_hostname = False
     ssl_context.load_verify_locations("./cert/ca-cert.pem")
-    socket_server = SocketConnection('wss://127.0.0.1:1011/socket', cert_info=ssl_context)
+    socket_server = SocketConnection('wss://127.0.0.1:1010/socket', cert_info=ssl_context)
     socket_server.start()
-    print('here')
     publisher.register('ventilator', 'socket_server', socket_server.send_message)
 
     serial_connection = SerialConnectionFactory.create_serial_connection(yaml_config['ventilator']['connection'], publisher)
