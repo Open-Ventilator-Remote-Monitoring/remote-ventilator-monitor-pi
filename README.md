@@ -67,6 +67,7 @@ to customize the port and listen address of the app, like this:
 
 ### Using the pre-built SD Card Image
 #### Overview
+The flask server is configured to start automatically when the pi is booted and restart if there is an error.
 * Flask server code folder: /opt/remote-ventilator-monitor
 
 #### Services
