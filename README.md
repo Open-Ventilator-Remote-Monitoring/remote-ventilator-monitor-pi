@@ -66,7 +66,28 @@ The `start.sh` script supports two environmental variables, FLASK_PORT and FLASK
 to customize the port and listen address of the app, like this:
 
 ### Using the pre-built SD Card Image
+#### Overview
 * Flask server code folder: /opt/remote-ventilator-monitor
 
+#### Services
+The pi runs the following services:
+| Service | Purpose |
+| ----- | ----- |
+| set-hostname | Set hostname of the pi |
+| remote-ventilator-monitor | Flask Server |
+| avahi-daemon | Implement Bonjour |
+
+* Services are managed using [systemctl](https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units)
+* These services are configured to run automatically when the pi is booted, and to restart automatically in the event of an error
+* To check the current status of a service, `sudo systemctl status <service-name>`
+
+#### Working with services
+Here is a quick primer in using systemctl if you need to troubleshoot the services:
+* Service unit files are located in the /lib/systemd/system directory with a .service extension
+* To manually start a service, `sudo systemctl start, <service-name>`
+* To manually restart a service, `sudo systemctl restart, <service-name>`
+* To manually stop a running service, `sudo systemctl stop, <service-name>`
+* To tell systemd to automatically start a service at boot, `sudo systemctl enable <service-name>`
+* To disable a service from starting automatically at boot,  `sudo systemctl disable <service-name>`
 
 **Having a problem?** Leave a message on the Slack Channel or an issue on the Github and we'll help you out.
