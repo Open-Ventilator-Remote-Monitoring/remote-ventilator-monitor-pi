@@ -6,21 +6,8 @@ from ventilator_communication import VentilatorCommunication
 
 
 class GetStatus(Resource):
-    #def __init__(self, **kwargs):
-        # We're not using a serial connecting in the MVP
-        #self.serial_connection = kwargs['serial_connection']
-
-    def get(self):
-        # We're not using a serial connecting in the MVP
-        """
-        current_data = self.serial_connection.get_data()
-        if current_data:
-            return jsonify({'ventilator': [current_data.to_camelcase_dict()]})
-        else:
-            return jsonify({'ventilator': []})
-        """
+    def get(self, id):
         return jsonify({'soundear': []})
-
 
 
 class Server:
