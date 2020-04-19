@@ -45,15 +45,32 @@ Eventually we'll have pre-deployed images ready for download and quick install o
 14. `cd remote-ventilator-monitor-pi`
 15. Intall the python dependencies for the virtual environment `pipenv install`
 16. Open a virtual environment `sudo pipenv shell`
-17. Start the server using the start script: `FLASK_ENV=development FLASK_PORT=80 ./start.sh` (You may need to run `chmod 777 start.sh` first).
-18. Open a web browser on your desktop (connected to the same network as your pi) and visit the url `http://ventilator-1.local` You should see the index info page. 
-19. After you connect your properly programmed Arduino via a USB cable, you should be able to visit `http://ventilator-1.local/api/ventilator` and view JSON result of the latest ventilator stats. Refresh the page to query the Arduino again and get different values.
+17. Update the `application-*.yml` files with the correct config
+```yml
+ventilator:
+  name: <name of ventilator>
+  connection:
+    type: <random (testing) or serial(ardunio connection)>
+    link: <serial port>
+    baud: <baud speed>
+    timeout: <timeout amount>
+  alarm:
+    pin: <-1 (testing) or gpio port on pi>
+  device:
+    id: <self set id of raspberry pi>
+    roles:
+      ventilatorAlarmSoundMonitor: <true(enable alarm plugin) or false(disable)>
+      ventilatorDataMonitor: <true(enable ventilator plugin) or false(disable)>
+```
+18. Start the server using the start script: `FLASK_ENV=development FLASK_PORT=80 ./start.sh` (You may need to run `chmod 777 start.sh` first).
+19. Open a web browser on your desktop (connected to the same network as your pi) and visit the url `http://ventilator-1.local` You should see the index info page. 
+20. After you connect your properly programmed Arduino via a USB cable, you should be able to visit `http://ventilator-1.local/api/ventilator` and view JSON result of the latest ventilator stats. Refresh the page to query the Arduino again and get different values.
 
 ### Local Simulation
 
 If you would like to run the web UI and hit a local simulation interface, make sure you have
 all the dependencies installed:
-1. `pip install flask flask-cors flask-pyserial pyyaml` or `pivenv install`
+1. `pivenv install`
 2. Run the dev start script: `./start_dev.sh`
 3. You should now be able to hit `localhost:5000/api/ventilator` and get the JSON response back.
 
