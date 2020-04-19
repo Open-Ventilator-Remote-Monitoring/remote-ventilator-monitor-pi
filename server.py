@@ -32,7 +32,3 @@ class Server:
         #self.serial_connection.start_connection()
         self.setup_routing()
 
-    def shut_down(self):
-        # We're not using a serial connecting in the MVP
-        #self.serial_connection.stop_connection()
-
