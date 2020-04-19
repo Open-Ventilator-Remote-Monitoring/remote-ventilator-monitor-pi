@@ -6,7 +6,7 @@ from ventilator_communication import VentilatorCommunication
 
 
 class GetStatus(Resource):
-    def __init__(self, **kwargs):
+    #def __init__(self, **kwargs):
         # We're not using a serial connecting in the MVP
         #self.serial_connection = kwargs['serial_connection']
 
@@ -19,6 +19,7 @@ class GetStatus(Resource):
         else:
             return jsonify({'ventilator': []})
         """
+        return jsonify({'soundear': []})
 
 
 
@@ -37,7 +38,7 @@ class Server:
         self.api.add_resource(GetStatus, '/api/ventilator',
                               resource_class_kwargs={'serial_connection': self.serial_connection})
         """
-        self.api.add_resource(GetStatus, '/api/v1/status',resource_class_kwargs={ 'test': 'test1' } )
+        self.api.add_resource(GetStatus, '/api/v1/status' )
 
     def setup(self):
         # We're not using a serial connecting in the MVP
