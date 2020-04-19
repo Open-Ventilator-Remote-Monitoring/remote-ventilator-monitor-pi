@@ -14,7 +14,7 @@ class GetStatus(Resource):
         apiKey = "OpenVentApiKeyV1 123456789"
         headers = request.headers
         auth = headers.get("Authorization")
-        print("Authorization: " + str(auth))
+        #print("Authorization: " + str(auth))
 
         if (auth == apiKey):
             print("API Key OK")
@@ -45,8 +45,9 @@ class GetStatus(Resource):
 
         else:
             print("Bad Api Key")
-            return jsonify({"message": "ERROR: Unauthorized"}), 401
-
+            response = jsonify({"message": "ERROR: Unauthorized"})
+            response.status_code = 401
+            return response
 
 class Server:
     # We're not using a serial connecting in the MVP
