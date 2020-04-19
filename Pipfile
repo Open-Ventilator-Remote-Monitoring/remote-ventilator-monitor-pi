@@ -12,4 +12,4 @@ pyserial = "==3.4"
 flask-restful = "==0.3.8"
 gunicorn = "==20.0.4"
 pyyaml = "==5.3.1"
-
+gpiozero = "==1.5.1"

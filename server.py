@@ -4,10 +4,36 @@ from flask_restful import Api, Resource
 
 from ventilator_communication import VentilatorCommunication
 
+from gpiozero import Button
+
+input_from_soundear = Button(4, pull_up = False)
 
 class GetStatus(Resource):
     def get(self):
-        return jsonify({'soundear': []})
+
+        if input_from_soundear.is_pressed:
+            soundear_alarm = "false"
+        else:
+            soundear_alarm = "true"
+
+        return jsonify({  "device": {
+            "id": "ventilator-1",
+            "currentTime": "2020-04-17T11:58:00Z",
+            "roles": {
+              "ventilatorAlarmSoundMonitor": "true",
+              "ventilatorDataMonitor": "false"
+            }
+          },
+          "ventilatorAlarmSoundMonitor":
+          {
+            "timestamp": "2020-04-17T11:58:00Z",
+            "status": {
+            },
+            "alerts": {
+              "audioAlarm": soundear_alarm
+            }
+          }
+        })
 
 
 class Server:
