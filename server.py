@@ -12,9 +12,9 @@ class GetStatus(Resource):
     def get(self):
 
         if input_from_soundear.is_pressed:
-            soundear_alarm = "false"
+            soundear_alarm = False
         else:
-            soundear_alarm = "true"
+            soundear_alarm = True
 
         return jsonify({  "device": {
             "id": "ventilator-1",
