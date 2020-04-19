@@ -4,7 +4,7 @@ import yaml
 from signal import signal, SIGINT
 from sys import exit
 
-from serial_connection_factory import SerialConnectionFactory
+#from serial_connection_factory import SerialConnectionFactory
 from server import Server
 
 
@@ -18,6 +18,8 @@ def create_app():
     server_app = Flask(__name__)
     CORS(server_app)
 
+    # We're not using a serial conncection in the MVP
+    """
     config_file = "application-{}.yml".format(server_app.config["ENV"])
     try:
         with open(config_file) as file:
@@ -29,8 +31,10 @@ def create_app():
         raise ServerConfigurationException(f'Error, could not load configuration {config_file}')
 
     serial_connection = SerialConnectionFactory.create_serial_connection(yaml_config['ventilator']['connection'])
+    """
 
-    server = Server(app=server_app, serial_connection=serial_connection)
+    #server = Server(app=server_app, serial_connection=serial_connection)
+    server = Server(app=server_app)
     server.setup()
 
     def handler(signal_received, frame):
