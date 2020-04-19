@@ -6,7 +6,7 @@ from ventilator_communication import VentilatorCommunication
 
 
 class GetStatus(Resource):
-    def get(self, id):
+    def get(self):
         return jsonify({'soundear': []})
 
 
