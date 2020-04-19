@@ -3,6 +3,9 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
+[requires]
+python_version = "3.7"
+
 [dev-packages]
 
 [packages]
@@ -13,3 +16,4 @@ flask-restful = "==0.3.8"
 gunicorn = "==20.0.4"
 pyyaml = "==5.3.1"
 gpiozero = "==1.5.1"
+webargs = "*"

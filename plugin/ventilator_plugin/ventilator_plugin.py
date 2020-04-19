@@ -2,31 +2,35 @@ import threading
 from datetime import datetime, timezone
 from typing import Union, Dict
 
-from flask import jsonify
+from flask import jsonify, request
 from flask_restful import Api, Resource
 
 from plugin.plugin_base import PluginBase
 from plugin.ventilator_plugin.ventilator_communication import VentilatorData, VentilatorCommunication
 
+from service.authorization_service import AuthorizationService
+
 
 class VentilatorPluginGetStatus(Resource):
     def __init__(self, **kwargs):
+        self.authorization_service = kwargs['authorization_service']
         self.plugin = kwargs['plugin']
 
     def get(self):
-        current_data = self.plugin.get_data()
-        if current_data:
-            return jsonify(self.plugin.get_data())
-        else:
-            return jsonify({'ventilator': []})
+        if self.authorization_service.is_authorized(request.headers.get('api_key')):
+            current_data = self.plugin.get_data()
+            if current_data:
+                return jsonify(self.plugin.get_data())
+        return jsonify({'ventilator': []})
 
 
 class VentilatorPlugin(PluginBase):
-    def __init__(self, serial_connection: VentilatorCommunication):
+    def __init__(self, serial_connection: VentilatorCommunication, authorization_service: AuthorizationService):
         self.lock = threading.Lock()
         self.serial_connection = serial_connection
         self.end_point = None
         self.is_running = False
+        self.authorization_service = authorization_service
 
     def start_plugin(self) -> None:
         with self.lock:
@@ -36,7 +40,10 @@ class VentilatorPlugin(PluginBase):
 
     def add_endpoints(self, api: Api) -> None:
         if self.end_point:
-            api.add_resource(VentilatorPluginGetStatus, self.end_point, resource_class_kwargs={'plugin': self})
+            api.add_resource(VentilatorPluginGetStatus, self.end_point, resource_class_kwargs={
+                'plugin': self,
+                'authorization_service': self.authorization_service
+            })
 
     def get_raw_data(self) -> VentilatorData:
         with self.lock:

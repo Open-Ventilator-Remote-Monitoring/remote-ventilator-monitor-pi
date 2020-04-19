@@ -26,6 +26,8 @@ class AlarmService(AlarmServiceInterface):
             self.alarm_handler.update_alarm_data(AlarmData(True, timestamp=datetime.utcnow().timestamp()))
             self.trigger.wait_for_active()
         while self.is_running:
+            with self.lock:
+                self.alarm_handler.update_alarm_data(AlarmData(False, timestamp=datetime.utcnow().timestamp()))
             self.trigger.wait_for_inactive()
             with self.lock:
                 self.alarm_handler.update_alarm_data(AlarmData(True, timestamp=datetime.utcnow().timestamp()))

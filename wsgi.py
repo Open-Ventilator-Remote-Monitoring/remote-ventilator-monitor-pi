@@ -15,6 +15,7 @@ from plugin.device_plugin.device_plugin import DevicePlugin
 from plugin.status_plugin.status_plugin import StatusPlugin
 from plugin.ventilator_plugin.ventilator_plugin import VentilatorPlugin
 from server import Server
+from service.authorization_service import ApiKeyAuthorizationService, NoAuthorizationService
 
 
 class ServerConfigurationException(Exception):
@@ -36,6 +37,11 @@ def create_app():
     except OSError:
         raise ServerConfigurationException(f'Error, could not load configuration {config_file}')
 
+    if yaml_config['ventilator']['api_key']:
+        authorization_service = ApiKeyAuthorizationService(yaml_config['ventilator']['api_key'])
+    else:
+        authorization_service = NoAuthorizationService()
+
     device_config = yaml_config['ventilator']['device']
 
     device_plugin = DevicePlugin(device_config['id'], device_config['roles'])
@@ -47,12 +53,14 @@ def create_app():
         if device_config['roles']['ventilatorDataMonitor']:
             serial_connection = SerialConnectionFactory.create_serial_connection(
                 yaml_config['ventilator']['connection'])
-            ventilator_plugin = VentilatorPlugin(serial_connection=serial_connection)
+            ventilator_plugin = VentilatorPlugin(
+                serial_connection=serial_connection,
+                authorization_service=authorization_service
+            )
             ventilator_plugin.enable_endpoint('/api/v1/ventilatorDataMonitor')
             additional_plugins['ventilatorDataMonitor'] = ventilator_plugin
         if device_config['roles']['ventilatorAlarmSoundMonitor']:
             alarm_handler = AlarmHandler()
-            alarm_service = None
             if yaml_config['ventilator']['alarm']['pin'] == -1:
                 alarm_service = RandomAlarm(alarm_handler)
             else:
@@ -64,9 +72,8 @@ def create_app():
             alarm_plugin.enable_endpoint('/api/v1/ventilatorAlarmSoundMonitor')
             additional_plugins['ventilatorAlarmSoundMonitor'] = alarm_plugin
 
-    print(plugins)
     plugins.update(additional_plugins)
-    status_plugin = StatusPlugin(plugins=plugins)
+    status_plugin = StatusPlugin(plugins=plugins, authorization_service=authorization_service)
     status_plugin.enable_endpoint('/api/v1/status')
 
     visible_plugin = {
