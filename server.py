@@ -17,33 +17,35 @@ class GetStatus(Resource):
         print("Authorization: " + str(auth))
 
         if (auth == apiKey):
-            print("API Key Ok")
+            print("API Key OK")
+
+            if input_from_soundear.is_pressed:
+                soundear_alarm = False
+            else:
+                soundear_alarm = True
+
+            return jsonify({  "device": {
+                "id": "ventilator-1",
+                "currentTime": "2020-04-17T11:58:00Z",
+                "roles": {
+                  "ventilatorAlarmSoundMonitor": "true",
+                  "ventilatorDataMonitor": "false"
+                }
+              },
+              "ventilatorAlarmSoundMonitor":
+              {
+                "timestamp": "2020-04-17T11:58:00Z",
+                "status": {
+                },
+                "alerts": {
+                  "audioAlarm": soundear_alarm
+                }
+              }
+            })
+
         else:
             print("Bad Api Key")
-
-        if input_from_soundear.is_pressed:
-            soundear_alarm = False
-        else:
-            soundear_alarm = True
-
-        return jsonify({  "device": {
-            "id": "ventilator-1",
-            "currentTime": "2020-04-17T11:58:00Z",
-            "roles": {
-              "ventilatorAlarmSoundMonitor": "true",
-              "ventilatorDataMonitor": "false"
-            }
-          },
-          "ventilatorAlarmSoundMonitor":
-          {
-            "timestamp": "2020-04-17T11:58:00Z",
-            "status": {
-            },
-            "alerts": {
-              "audioAlarm": soundear_alarm
-            }
-          }
-        })
+            return jsonify({"message": "ERROR: Unauthorized"}), 401
 
 
 class Server:
