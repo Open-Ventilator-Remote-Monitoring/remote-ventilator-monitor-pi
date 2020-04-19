@@ -1,0 +1,14 @@
+[Unit]
+Description=Open Remote Ventilator Monitor Service
+After=network.target
+
+[Service]
+Restart=always
+Type=simple
+WorkingDirectory=/opt/remote-ventilator-monitor-pi
+Environment="FLASK_PORT=80"
+Environment="FLASK_ENV=production"
+ExecStart=/usr/bin/pipenv run /opt/remote-ventilator-monitor-pi/start.sh
+
+[Install]
+WantedBy=multi-user.target

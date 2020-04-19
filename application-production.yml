@@ -1,0 +1,7 @@
+ventilator:
+  name: Ventilator-1
+  connection:
+    type: serial
+    link: /dev/ttyACM0
+    baud: 9600
+    timeout: 1
