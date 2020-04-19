@@ -1,6 +1,6 @@
 import threading
 
-from ventilator_communication import VentilatorData
+from plugin.ventilator_plugin.ventilator_communication import VentilatorData
 
 
 class SerialMonitorHandler:
@@ -14,4 +14,3 @@ class SerialMonitorHandler:
     def get_current_data(self) -> VentilatorData:
         with self.lock:
             return self.current_data
-

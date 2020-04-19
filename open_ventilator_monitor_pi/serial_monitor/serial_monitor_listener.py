@@ -4,7 +4,7 @@ from threading import Thread
 from serial import Serial, SerialTimeoutException
 
 from open_ventilator_monitor_pi.serial_monitor.serial_monitor_handler import SerialMonitorHandler
-from ventilator_communication import VentilatorData
+from plugin.ventilator_plugin.ventilator_communication import VentilatorData
 
 
 class SerialMonitorListener(Thread):
@@ -75,7 +75,3 @@ class SerialMonitorListener(Thread):
                     count = 0
             except SerialTimeoutException:
                 continue
-
-
-
-

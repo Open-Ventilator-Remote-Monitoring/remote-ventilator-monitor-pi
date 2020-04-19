@@ -1,11 +1,10 @@
-import time
-
-from ventilator_communication import VentilatorCommunication, VentilatorData
 import random
+from datetime import datetime
+
+from plugin.ventilator_plugin.ventilator_communication import VentilatorCommunication, VentilatorData
 
 
 class RandomVentilator(VentilatorCommunication):
-
     alarm_chance = 0.5
     ie_ratio_values = ["1:2", "1:3", "1:4", "2:1"]
     alarms = ["Failure to deliver pressurized air/oxygen", "Failure to deliver oxygen", "Inspiratory pressure too high",
@@ -21,7 +20,7 @@ class RandomVentilator(VentilatorCommunication):
             ie_ratio=random.choice(RandomVentilator.ie_ratio_values),
             peep=random.randint(1, 3),
             alarms=self.randomize_alarms(),
-            timestamp=time.time()
+            timestamp=datetime.utcnow().timestamp()
         )
 
     @staticmethod
