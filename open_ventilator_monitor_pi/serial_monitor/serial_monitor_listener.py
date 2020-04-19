@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 from threading import Thread
 
 from serial import Serial, SerialTimeoutException
@@ -66,7 +67,7 @@ class SerialMonitorListener(Thread):
                             ie_ratio=ie_ratio,
                             peep=peep,
                             alarms={},
-                            timestamp=time.time()
+                            timestamp=datetime.utcnow().timestamp()
                         ))
                 elif x == header:
                     count += 1
