@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_restful import Api, Resource
 
 from ventilator_communication import VentilatorCommunication
@@ -10,6 +10,16 @@ input_from_soundear = Button(4, pull_up = False)
 
 class GetStatus(Resource):
     def get(self):
+
+        apiKey = "OpenVentApiKeyV1 123456789"
+        headers = request.headers
+        auth = headers.get("Authorization")
+        print("Authorization: " + str(auth))
+
+        if (auth == apiKey):
+            print("API Key Ok")
+        else:
+            print("Bad Api Key")
 
         if input_from_soundear.is_pressed:
             soundear_alarm = False
