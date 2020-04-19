@@ -31,7 +31,9 @@ class AlarmSoundPlugin(PluginBase):
                 'audioAlarm': data.status,
                 'triggered': datetime.fromtimestamp(data.timestamp).isoformat()
             }
-        } if data else {}
+        } if data else {
+            'timestamp': datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),
+        }
 
     def get_raw_data(self) -> AlarmData:
         with self.lock:
