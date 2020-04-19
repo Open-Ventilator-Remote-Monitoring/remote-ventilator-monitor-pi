@@ -22,11 +22,16 @@ class AlarmService(AlarmServiceInterface):
 
     def run(self) -> None:
         self.is_running = True
-        while self.is_running:
-            self.trigger.wait_for_inactive()
+        with self.lock:
             self.alarm_handler.update_alarm_data(AlarmData(True, timestamp=datetime.utcnow().timestamp()))
             self.trigger.wait_for_active()
-            self.alarm_handler.update_alarm_data(AlarmData(False, timestamp=datetime.utcnow().timestamp()))
+        while self.is_running:
+            self.trigger.wait_for_inactive()
+            with self.lock:
+                self.alarm_handler.update_alarm_data(AlarmData(True, timestamp=datetime.utcnow().timestamp()))
+            self.trigger.wait_for_active()
+            with self.lock:
+                self.alarm_handler.update_alarm_data(AlarmData(False, timestamp=datetime.utcnow().timestamp()))
 
     def stop(self):
         with self.lock:

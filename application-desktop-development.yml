@@ -11,4 +11,4 @@ ventilator:
     id: 85c66b7e-c6f5-4304-a0d8-f1ecdc7f6dc5
     roles:
       ventilatorAlarmSoundMonitor: true
-      ventilatorDataMonitor: true
+      ventilatorDataMonitor: false

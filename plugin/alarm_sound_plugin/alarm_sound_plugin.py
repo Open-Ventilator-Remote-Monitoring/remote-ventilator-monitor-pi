@@ -31,10 +31,11 @@ class AlarmSoundPlugin(PluginBase):
                 'audioAlarm': data.status,
                 'triggered': datetime.fromtimestamp(data.timestamp).isoformat()
             }
-        }
+        } if data else {}
 
     def get_raw_data(self) -> AlarmData:
-        return self.alarm_service.get_data()
+        with self.lock:
+            return self.alarm_service.get_data()
 
     def stop_plugin(self) -> None:
         with self.lock:
