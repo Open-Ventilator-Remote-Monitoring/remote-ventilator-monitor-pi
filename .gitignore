@@ -3,3 +3,5 @@ __pycache__/
 *.iml
 venv
 cert/*
+/server.crt
+/server.key
