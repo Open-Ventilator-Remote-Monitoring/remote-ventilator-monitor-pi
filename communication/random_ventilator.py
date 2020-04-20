@@ -29,3 +29,6 @@ class RandomVentilator(VentilatorCommunication):
             return {random.choice(RandomVentilator.alarms): True}
         else:
             return {}
+
+    def is_ready(self) -> bool:
+        return True

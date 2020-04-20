@@ -1,4 +1,3 @@
-import time
 from datetime import datetime
 from threading import Thread
 
@@ -34,6 +33,7 @@ class SerialMonitorListener(Thread):
         return (value & 0xFF) + (value >> 8 & 0xFF)
 
     def stop(self) -> None:
+        self.serial_monitor_handler.update_ready(False)
         self.is_running = False
 
     def run(self) -> None:
@@ -42,6 +42,7 @@ class SerialMonitorListener(Thread):
         header = ord(b'\xff')
         while self.is_running:
             try:
+                self.serial_monitor_handler.update_ready(True)
                 x = self._read_int_8()
                 if count == 2:
                     count = 0

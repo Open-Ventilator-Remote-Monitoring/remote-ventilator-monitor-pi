@@ -19,6 +19,7 @@ class RandomAlarm(AlarmServiceInterface):
         self.is_running = True
         while self.is_running:
             sleep(5)
+            self.alarm_handler.update_ready(True)
             self.alarm_handler.update_alarm_data(AlarmData(random() > .5, timestamp=datetime.utcnow().timestamp()))
 
     def stop(self):
@@ -28,3 +29,6 @@ class RandomAlarm(AlarmServiceInterface):
     def get_data(self) -> AlarmData:
         with self.lock:
             return self.alarm_handler.get_alarm_data()
+
+    def is_ready(self) -> bool:
+        return self.alarm_handler.get_ready()

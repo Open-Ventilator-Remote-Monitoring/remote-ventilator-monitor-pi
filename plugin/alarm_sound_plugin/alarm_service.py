@@ -10,6 +10,8 @@ from plugin.alarm_sound_plugin.alarm_handler import AlarmHandler
 
 class AlarmServiceInterface(Thread):
     def get_data(self) -> AlarmData: pass
+    def is_ready(self) -> bool: pass
+    def stop(self) -> None: pass
 
 
 class AlarmService(AlarmServiceInterface):
@@ -26,6 +28,7 @@ class AlarmService(AlarmServiceInterface):
             self.alarm_handler.update_alarm_data(AlarmData(True, timestamp=datetime.utcnow().timestamp()))
             self.trigger.wait_for_active()
         while self.is_running:
+            self.alarm_handler.update_ready(True)
             with self.lock:
                 self.alarm_handler.update_alarm_data(AlarmData(False, timestamp=datetime.utcnow().timestamp()))
             self.trigger.wait_for_inactive()
@@ -35,13 +38,16 @@ class AlarmService(AlarmServiceInterface):
             with self.lock:
                 self.alarm_handler.update_alarm_data(AlarmData(False, timestamp=datetime.utcnow().timestamp()))
 
-    def stop(self):
+    def stop(self) -> None:
         with self.lock:
             self.is_running = False
 
     def get_data(self) -> AlarmData:
         with self.lock:
             return self.alarm_handler.get_alarm_data()
+
+    def is_ready(self) -> bool:
+        return self.alarm_handler.get_ready()
 
 
 

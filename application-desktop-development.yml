@@ -1,6 +1,6 @@
 ventilator:
   name: Local-Dev-Ventilator-1
-  api_key: d766d78e-5097-47da-9e0c-83da20a3e79e
+  authorization: d766d78e-5097-47da-9e0c-83da20a3e79e
   connection:
     type: serial
     link: COM4
@@ -11,5 +11,5 @@ ventilator:
   device:
     id: 85c66b7e-c6f5-4304-a0d8-f1ecdc7f6dc5
     roles:
-      ventilatorAlarmSoundMonitor: false
-      ventilatorDataMonitor: false
+      ventilatorAlarmSoundMonitor: true
+      ventilatorDataMonitor: true

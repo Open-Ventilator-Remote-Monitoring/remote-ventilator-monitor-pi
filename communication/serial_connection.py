@@ -28,3 +28,6 @@ class SerialConnection(VentilatorCommunication):
 
     def get_data(self) -> VentilatorData:
         return self.serial_monitor_handler.get_current_data()
+
+    def is_ready(self) -> bool:
+        return self.serial_monitor_handler.get_ready()

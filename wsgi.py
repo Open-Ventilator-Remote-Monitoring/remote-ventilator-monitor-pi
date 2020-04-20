@@ -37,8 +37,8 @@ def create_app():
     except OSError:
         raise ServerConfigurationException(f'Error, could not load configuration {config_file}')
 
-    if yaml_config['ventilator']['api_key']:
-        authorization_service = ApiKeyAuthorizationService(yaml_config['ventilator']['api_key'])
+    if yaml_config['ventilator']['authorization']:
+        authorization_service = ApiKeyAuthorizationService(yaml_config['ventilator']['authorization'])
     else:
         authorization_service = NoAuthorizationService()
 

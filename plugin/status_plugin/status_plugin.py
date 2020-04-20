@@ -1,7 +1,7 @@
 from typing import Dict
 
-from flask import jsonify, request
-from flask_restful import Resource, Api
+from flask import request
+from flask_restful import Resource, Api, abort
 
 from plugin.plugin_base import PluginBase
 
@@ -14,10 +14,10 @@ class StatusPluginGetStatus(Resource):
         self.plugin = kwargs['plugin']
 
     def get(self):
-        if self.authorization_service.is_authorized(request.headers.get('api_key')):
+        if self.authorization_service.is_authorized(request.headers):
             current_data = self.plugin.get_data()
-            return jsonify(current_data)
-        return jsonify({})
+            return current_data
+        abort(401, message='ERROR: Unauthorized')
 
 
 class StatusPlugin(PluginBase):

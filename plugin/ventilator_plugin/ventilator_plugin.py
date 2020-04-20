@@ -2,8 +2,8 @@ import threading
 from datetime import datetime, timezone
 from typing import Union, Dict
 
-from flask import jsonify, request
-from flask_restful import Api, Resource
+from flask import request
+from flask_restful import Api, Resource, abort
 
 from plugin.plugin_base import PluginBase
 from plugin.ventilator_plugin.ventilator_communication import VentilatorData, VentilatorCommunication
@@ -17,11 +17,9 @@ class VentilatorPluginGetStatus(Resource):
         self.plugin = kwargs['plugin']
 
     def get(self):
-        if self.authorization_service.is_authorized(request.headers.get('api_key')):
-            current_data = self.plugin.get_data()
-            if current_data:
-                return jsonify(self.plugin.get_data())
-        return jsonify({'ventilator': []})
+        if self.authorization_service.is_authorized(request.headers):
+            return self.plugin.get_data(), 200
+        abort(401, message='ERROR: Unauthorized')
 
 
 class VentilatorPlugin(PluginBase):
@@ -55,6 +53,8 @@ class VentilatorPlugin(PluginBase):
         return {
             'timestamp': datetime.fromtimestamp(current_data.timestamp).isoformat(),
             'status': {
+                'ready': self.serial_connection.is_ready(),
+                'running': self.is_running,
                 'ieRatio': {
                     'value': current_data.ie_ratio,
                     'uom': 'ratio',
@@ -78,7 +78,10 @@ class VentilatorPlugin(PluginBase):
             }
         } if current_data else {
             'timestamp': datetime.utcnow().replace(tzinfo=timezone.utc).isoformat(),
-            'status': {}
+            'status': {
+                'ready': self.serial_connection.is_ready(),
+                'running': self.is_running
+            }
         }
 
     def stop_plugin(self) -> None:
