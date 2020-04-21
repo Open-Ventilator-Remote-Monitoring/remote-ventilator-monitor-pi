@@ -1,6 +1,7 @@
 import threading
 from datetime import datetime
 from threading import Thread
+from time import sleep
 
 from gpiozero import Button
 
@@ -24,19 +25,13 @@ class AlarmService(AlarmServiceInterface):
 
     def run(self) -> None:
         self.is_running = True
-        with self.lock:
-            self.alarm_handler.update_alarm_data(AlarmData(True, timestamp=datetime.utcnow().timestamp()))
-            self.trigger.wait_for_active()
+        self.alarm_handler.update_ready(True)
         while self.is_running:
-            self.alarm_handler.update_ready(True)
-            with self.lock:
+            sleep(5)
+            if self.trigger.is_active:
                 self.alarm_handler.update_alarm_data(AlarmData(False, timestamp=datetime.utcnow().timestamp()))
-            self.trigger.wait_for_inactive()
-            with self.lock:
+            else:
                 self.alarm_handler.update_alarm_data(AlarmData(True, timestamp=datetime.utcnow().timestamp()))
-            self.trigger.wait_for_active()
-            with self.lock:
-                self.alarm_handler.update_alarm_data(AlarmData(False, timestamp=datetime.utcnow().timestamp()))
 
     def stop(self) -> None:
         with self.lock:
