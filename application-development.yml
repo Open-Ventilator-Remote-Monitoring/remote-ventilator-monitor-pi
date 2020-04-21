@@ -1,13 +1,13 @@
 ventilator:
   name: Random-Ventilator-1
-  authorization: d766d78e-5097-47da-9e0c-83da20a3e79e
+  authorization: OpenVentApiKeyV1 123456789
   connection:
     type: random
     link: /dev/ttyACM0
     baud: 9600
     timeout: 1
   alarm:
-    pin: -1
+    pin: 4
   device:
     id: 85c66b7e-c6f5-4304-a0d8-f1ecdc7f6dc5
     roles:
