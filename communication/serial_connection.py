@@ -2,7 +2,7 @@ from serial import Serial
 
 from open_ventilator_monitor_pi.serial_monitor.serial_monitor_handler import SerialMonitorHandler
 from open_ventilator_monitor_pi.serial_monitor.serial_monitor_listener import SerialMonitorListener
-from ventilator_communication import VentilatorCommunication, VentilatorData
+from plugin.ventilator_plugin.ventilator_communication import VentilatorCommunication, VentilatorData
 
 
 class SerialConnection(VentilatorCommunication):
@@ -28,3 +28,6 @@ class SerialConnection(VentilatorCommunication):
 
     def get_data(self) -> VentilatorData:
         return self.serial_monitor_handler.get_current_data()
+
+    def is_ready(self) -> bool:
+        return self.serial_monitor_handler.get_ready()

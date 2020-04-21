@@ -1,7 +1,15 @@
 ventilator:
   name: Local-Dev-Ventilator-1
+  authorization: false
   connection:
-    type: random
+    type: serial
     link: COM4
     baud: 9600
     timeout: 1
+  alarm:
+    pin: -1
+  device:
+    id: 85c66b7e-c6f5-4304-a0d8-f1ecdc7f6dc5
+    roles:
+      ventilatorAlarmSoundMonitor: true
+      ventilatorDataMonitor: true

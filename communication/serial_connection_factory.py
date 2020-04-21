@@ -1,10 +1,10 @@
 import serial
 
+from communication.random_ventilator import RandomVentilator
+from communication.serial_connection import SerialConnection
 from open_ventilator_monitor_pi.serial_monitor.serial_monitor_handler import SerialMonitorHandler
 from open_ventilator_monitor_pi.serial_monitor.serial_monitor_listener import SerialMonitorListener
-from random_ventilator import RandomVentilator
-from serial_connection import SerialConnection
-from ventilator_communication import VentilatorCommunication
+from plugin.ventilator_plugin.ventilator_communication import VentilatorCommunication
 
 
 class UnknownConnectionType(Exception):

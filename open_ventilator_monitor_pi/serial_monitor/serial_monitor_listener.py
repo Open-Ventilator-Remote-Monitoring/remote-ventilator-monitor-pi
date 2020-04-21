@@ -1,10 +1,10 @@
-import time
+from datetime import datetime
 from threading import Thread
 
 from serial import Serial, SerialTimeoutException
 
 from open_ventilator_monitor_pi.serial_monitor.serial_monitor_handler import SerialMonitorHandler
-from ventilator_communication import VentilatorData
+from plugin.ventilator_plugin.ventilator_communication import VentilatorData
 
 
 class SerialMonitorListener(Thread):
@@ -33,6 +33,7 @@ class SerialMonitorListener(Thread):
         return (value & 0xFF) + (value >> 8 & 0xFF)
 
     def stop(self) -> None:
+        self.serial_monitor_handler.update_ready(False)
         self.is_running = False
 
     def run(self) -> None:
@@ -41,6 +42,7 @@ class SerialMonitorListener(Thread):
         header = ord(b'\xff')
         while self.is_running:
             try:
+                self.serial_monitor_handler.update_ready(True)
                 x = self._read_int_8()
                 if count == 2:
                     count = 0
@@ -66,7 +68,7 @@ class SerialMonitorListener(Thread):
                             ie_ratio=ie_ratio,
                             peep=peep,
                             alarms={},
-                            timestamp=time.time()
+                            timestamp=datetime.utcnow().timestamp()
                         ))
                 elif x == header:
                     count += 1
@@ -75,7 +77,3 @@ class SerialMonitorListener(Thread):
                     count = 0
             except SerialTimeoutException:
                 continue
-
-
-
-
