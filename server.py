@@ -1,38 +1,26 @@
+from typing import Dict
 
-from flask import Flask, jsonify
-from flask_restful import Api, Resource
+from flask import Flask
+from flask_restful import Api
 
-from ventilator_communication import VentilatorCommunication
-
-
-class GetStatus(Resource):
-    def __init__(self, **kwargs):
-        self.serial_connection = kwargs['serial_connection']
-
-    def get(self):
-        current_data = self.serial_connection.get_data()
-        if current_data:
-            return jsonify({'ventilator': [current_data.to_camelcase_dict()]})
-        else:
-            return jsonify({'ventilator': []})
-
-
+from plugin.plugin_base import PluginBase
 
 
 class Server:
-    def __init__(self, app: Flask,  serial_connection: VentilatorCommunication):
+    def __init__(self, app: Flask, plugins: Dict[str, PluginBase]):
         self.app = app
         self.api = Api(self.app)
-        self.serial_connection = serial_connection
+        self.plugins = plugins
 
     def setup_routing(self):
-        self.api.add_resource(GetStatus, '/api/ventilator',
-                              resource_class_kwargs={'serial_connection': self.serial_connection})
+        for key, plugin in self.plugins.items():
+            plugin.add_endpoints(self.api)
 
     def setup(self):
-        self.serial_connection.start_connection()
+        for key, plugin in self.plugins.items():
+            plugin.start_plugin()
         self.setup_routing()
 
     def shut_down(self):
-        self.serial_connection.stop_connection()
-
+        for key, plugin in self.plugins.items():
+            plugin.stop_plugin()

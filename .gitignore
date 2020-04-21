@@ -2,3 +2,6 @@ __pycache__/
 .idea
 *.iml
 venv
+cert/*
+/server.crt
+/server.key
