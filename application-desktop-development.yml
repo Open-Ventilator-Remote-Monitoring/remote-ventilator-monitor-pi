@@ -1,6 +1,6 @@
 ventilator:
   name: Local-Dev-Ventilator-1
-  authorization: d766d78e-5097-47da-9e0c-83da20a3e79e
+  authorization: false
   connection:
     type: serial
     link: COM4
