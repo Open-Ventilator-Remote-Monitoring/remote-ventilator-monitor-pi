@@ -29,9 +29,9 @@ class AlarmService(AlarmServiceInterface):
             sleep(.01)
             self.alarm_handler.update_ready(True)
             if self.trigger.is_active:
-                self.alarm_handler.update_alarm_data(AlarmData(True, timestamp=datetime.utcnow().timestamp()))
-            else:
                 self.alarm_handler.update_alarm_data(AlarmData(False, timestamp=datetime.utcnow().timestamp()))
+            else:
+                self.alarm_handler.update_alarm_data(AlarmData(True, timestamp=datetime.utcnow().timestamp()))
 
     def stop(self) -> None:
         with self.lock:
