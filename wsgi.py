@@ -66,7 +66,7 @@ def create_app():
             else:
                 alarm_service = AlarmService(
                     alarm_handler=alarm_handler,
-                    trigger=Button(yaml_config['ventilator']['alarm']['pin'], True)
+                    trigger=Button(yaml_config['ventilator']['alarm']['pin'], pull_up=False)
                 )
             alarm_plugin = AlarmSoundPlugin(alarm_service=alarm_service)
             alarm_plugin.enable_endpoint('/api/v1/ventilatorAlarmSoundMonitor')
