@@ -9,16 +9,14 @@ This git repo is for the code on the **Raspberry Pi**
 | Javascript | Python | C++ |
 
 ### Goal
-Create a lightweight Raspberry Pi application to serve as a network adapter to relay data from Arduino-Based ventilators to a central monitoring dashboard (javascript web-browser application).
-
-### Caution
-This software is currently only a concept - it is neither approved nor intended to be used in any medical setting.
-
-### Why Raspberry Pi?
-Many of the rapidly manufacturable ventiltor designs utilize and arduino-based control system which does not have a network interface. The raspberry pi provides this network interface, serving as an API endpoint which can connect to central monitoring dashboard (javascript web-browser application). Raspberry pi's are cheap, easy to program, available in large quantities, locally sourceable, and reliable (by consumer hardwarwe standards).
+Create a lightweight Raspberry Pi application to serve as a network adapter to relay data from ventilators to a central monitoring dashboard (javascript web-browser application).
 
 ### Current State of the App
-**As of 11-April-2020:** Currently, the app is in demo/testing mode only.
+**As of 22-April-2020:** Currently, the app is in demo/testing mode only.
+This software is not approved to be used in a medical setting.
+
+### Why Raspberry Pi?
+Many of the rapidly manufacturable ventiltor designs utilize and arduino-based control system which does not have a network interface. The raspberry pi provides this network interface, serving as an API endpoint which can connect to central monitoring dashboard (javascript web-browser application). Raspberry pi's are affordable, easy to program, available in large quantities, locally sourceable, and reliable (by consumer hardware standards).
 
 ### What Hardware do I need Development & Testing?
 1. Obtain a Raspberry Pi board. Many raspberry pi's will work, but the [Raspberry Pi 3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/) is widely available for an affordable price (~$ USD). These products are widely avialable, so shop around. [Newark](https://www.newark.com/buy-raspberry-pi) is the main US distributor and currently has about 56,000 [Raspberry Pi 4 Model B](https://www.newark.com/raspberry-pi/rpi4-modbp-4gb/raspberry-pi-4-model-b-4gb-rohs/dp/02AH3164)'s in stock for ~$55 USD each. 
@@ -27,8 +25,37 @@ Many of the rapidly manufacturable ventiltor designs utilize and arduino-based c
 4. Obtain an SD card - buy a high quality one with a good amount of memory. The Sandick Ultra Plus microSDHC UHS-I 32 GB seems to work nicely.
 5. Obtain an SD card reader if you don't already have one.
 
-### How do I set up my Raspberry Pi for Development & Testing?
-Eventually we'll have pre-deployed images ready for download and quick install onto your SD card. For now, there is a lot of manual work:
+### Using a pre-built SD Card Image
+#### Overview
+The flask server is configured to start automatically when the pi is booted and restart if there is an error.
+* Flask server code folder: /opt/remote-ventilator-monitor
+
+#### Generating an SD Card Image
+The [Provisioning Script](https://github.com/Open-Ventilator-Remote-Monitoring/ventilator-monitor-provisioning) makes it easy to generate an SD card image for your raspberry pi.
+
+#### Services
+The pi runs the following services:
+| Service | Purpose |
+| ----- | ----- |
+| set-hostname | Set hostname of the pi |
+| remote-ventilator-monitor | Flask Server |
+| avahi-daemon | Implement Bonjour |
+
+* Services are managed using [systemctl](https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units)
+* These services are configured to run automatically when the pi is booted, and to restart automatically in the event of an error
+* To check the current status of a service, `sudo systemctl status <service-name>`
+
+#### Working with services
+Here is a quick primer in using systemctl if you need to troubleshoot the services:
+* Service unit files are located in the /lib/systemd/system directory with a .service extension
+* To manually start a service, `sudo systemctl start, <service-name>`
+* To manually restart a service, `sudo systemctl restart, <service-name>`
+* To manually stop a running service, `sudo systemctl stop, <service-name>`
+* To tell systemd to automatically start a service at boot, `sudo systemctl enable <service-name>`
+* To disable a service from starting automatically at boot,  `sudo systemctl disable <service-name>`
+
+### How do I Manually set up my Raspberry Pi for Development & Testing?
+The easiest way to get your raspberry pi up & running is to create an SD card image with our [provisioning script](https://github.com/Open-Ventilator-Remote-Monitoring/ventilator-monitor-provisioning). However, if you want to manually set up a raspbbery pi, here's how:
 1. Download the [SD Card Formatter](https://www.sdcard.org/downloads/formatter/index.html) tool to your desktop computer and format your SD card.
 2. Download the [Raspberry Pi Imager](https://www.raspberrypi.org/downloads/) for your desktop computer operating system.
 3. Open the Raspberry Pi Imager and install the Rasbian Lite Image onto your SD card
@@ -80,31 +107,5 @@ You can also run it under the gunicorn script in dev mode:
 
 The `start.sh` script supports two environmental variables, FLASK_PORT and FLASK_LISTEN, if you need
 to customize the port and listen address of the app, like this:
-
-### Using the pre-built SD Card Image
-#### Overview
-The flask server is configured to start automatically when the pi is booted and restart if there is an error.
-* Flask server code folder: /opt/remote-ventilator-monitor
-
-#### Services
-The pi runs the following services:
-| Service | Purpose |
-| ----- | ----- |
-| set-hostname | Set hostname of the pi |
-| remote-ventilator-monitor | Flask Server |
-| avahi-daemon | Implement Bonjour |
-
-* Services are managed using [systemctl](https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units)
-* These services are configured to run automatically when the pi is booted, and to restart automatically in the event of an error
-* To check the current status of a service, `sudo systemctl status <service-name>`
-
-#### Working with services
-Here is a quick primer in using systemctl if you need to troubleshoot the services:
-* Service unit files are located in the /lib/systemd/system directory with a .service extension
-* To manually start a service, `sudo systemctl start, <service-name>`
-* To manually restart a service, `sudo systemctl restart, <service-name>`
-* To manually stop a running service, `sudo systemctl stop, <service-name>`
-* To tell systemd to automatically start a service at boot, `sudo systemctl enable <service-name>`
-* To disable a service from starting automatically at boot,  `sudo systemctl disable <service-name>`
 
 **Having a problem?** Leave a message on the Slack Channel or an issue on the Github and we'll help you out.
